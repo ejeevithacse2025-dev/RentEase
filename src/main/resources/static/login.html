@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login - RentEase</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background: #f5f7fb;
+        }
+
+        header {
+            background: white;
+            padding: 20px 60px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .logo {
+            color: #2563eb;
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .login-container {
+            width: 400px;
+            max-width: 90%;
+            margin: 70px auto;
+            background: white;
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            margin-top: 25px;
+            border: none;
+            border-radius: 6px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .register-link a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <header>
+
+        <div class="logo">
+            RentEase
+        </div>
+
+    </header>
+
+
+    <div class="login-container">
+
+        <h1>Welcome Back</h1>
+
+
+        <form id="loginForm">
+
+            <label for="username">
+                Username
+            </label>
+
+            <input
+                type="text"
+                id="username"
+                placeholder="Enter username"
+                required
+            >
+
+
+            <label for="password">
+                Password
+            </label>
+
+            <input
+                type="password"
+                id="password"
+                placeholder="Enter password"
+                required
+            >
+
+
+            <button type="submit">
+                Login
+            </button>
+
+        </form>
+
+
+        <div class="register-link">
+
+            Don't have an account?
+
+            <a href="register.html">
+                Register
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        document
+            .getElementById("loginForm")
+            .addEventListener("submit", async function(event) {
+
+                event.preventDefault();
+
+
+                const username =
+                    document
+                    .getElementById("username")
+                    .value;
+
+                const password =
+                    document
+                    .getElementById("password")
+                    .value;
+
+
+                const user = {
+
+                    username: username,
+
+                    password: password
+
+                };
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            "/api/users/login",
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body:
+                                    JSON.stringify(user)
+                            }
+                        );
+
+
+                    if (response.ok) {
+
+                        const userData =
+                            await response.json();
+
+
+                        /*
+                         * Save the logged-in user's
+                         * information in the browser.
+                         */
+
+                        localStorage.setItem(
+                            "loggedInUser",
+                            JSON.stringify(userData)
+                        );
+
+
+                        alert(
+                            "Login successful!"
+                        );
+
+
+                        window.location.href =
+                            "index.html";
+
+                    } else {
+
+                        const message =
+                            await response.text();
+
+
+                        alert(
+                            "Login failed: " +
+                            message
+                        );
+
+                    }
+
+                } catch (error) {
+
+                    console.error(error);
+
+
+                    alert(
+                        "Could not connect to the server."
+                    );
+
+                }
+
+            });
+
+    </script>
+
+
+</body>
+
+</html>

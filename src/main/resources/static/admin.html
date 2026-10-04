@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard - RentEase</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background: #f5f7fb;
+            color: #222;
+        }
+
+        header {
+            background: #111827;
+            color: white;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .back-link {
+            color: white;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 35px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .stat-card h3 {
+            color: #666;
+            font-size: 15px;
+            margin-top: 0;
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        .panel {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+
+        .panel h2 {
+            margin-top: 0;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        button {
+            padding: 11px 18px;
+            border: none;
+            border-radius: 7px;
+            background: #2563eb;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .delete-button {
+            background: #dc2626;
+        }
+
+        .delete-button:hover {
+            background: #b91c1c;
+        }
+
+        .cancel-button {
+            background: #f59e0b;
+        }
+
+        .cancel-button:hover {
+            background: #d97706;
+        }
+
+        .save-button {
+            background: #16a34a;
+        }
+
+        .save-button:hover {
+            background: #15803d;
+        }
+
+        .product-list,
+        .rental-list {
+            display: grid;
+            gap: 15px;
+        }
+
+        .item {
+            border: 1px solid #e5e7eb;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .item h3 {
+            margin: 0 0 8px;
+        }
+
+        .item p {
+            margin: 6px 0;
+            color: #666;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .edit-box {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 8px;
+        }
+
+        .edit-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .status-active {
+            color: #166534;
+            font-weight: bold;
+        }
+
+        .status-cancelled {
+            color: #991b1b;
+            font-weight: bold;
+        }
+
+        #message {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 800px) {
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .form-grid,
+            .edit-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+        @media (max-width: 500px) {
+
+            header {
+                padding: 20px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <div class="logo">
+        RentEase Admin
+    </div>
+
+    <a
+        href="index.html"
+        class="back-link"
+    >
+        ← Back to Website
+    </a>
+
+</header>
+
+
+
+<div class="container">
+
+    <h1>
+        Admin Dashboard 📊
+    </h1>
+
+
+    <!-- STATISTICS -->
+
+    <div class="stats">
+
+        <div class="stat-card">
+
+            <h3>
+                Total Products
+            </h3>
+
+            <div
+                class="stat-number"
+                id="totalProducts"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <h3>
+                Available Products
+            </h3>
+
+            <div
+                class="stat-number"
+                id="availableProducts"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <h3>
+                Total Rentals
+            </h3>
+
+            <div
+                class="stat-number"
+                id="totalRentals"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <h3>
+                Active Rentals
+            </h3>
+
+            <div
+                class="stat-number"
+                id="activeRentals"
+            >
+                0
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ADD PRODUCT -->
+
+    <div class="panel">
+
+        <h2>
+            ➕ Add New Product
+        </h2>
+
+        <form id="productForm">
+
+            <div class="form-grid">
+
+                <input
+                    type="text"
+                    id="productName"
+                    placeholder="Product name"
+                    required
+                >
+
+                <select
+                    id="productCategory"
+                    required
+                >
+
+                    <option value="">
+                        Select category
+                    </option>
+
+                    <option value="Laptops">
+                        Laptops
+                    </option>
+
+                    <option value="Phones">
+                        Phones
+                    </option>
+
+                    <option value="Cameras">
+                        Cameras
+                    </option>
+
+                    <option value="Gaming">
+                        Gaming
+                    </option>
+
+                </select>
+
+                <input
+                    type="number"
+                    id="productPrice"
+                    placeholder="Price per day"
+                    min="1"
+                    required
+                >
+
+            </div>
+
+
+            <button
+                type="submit"
+                style="margin-top:15px;"
+            >
+                Add Product
+            </button>
+
+        </form>
+
+
+        <div id="message"></div>
+
+    </div>
+
+
+
+    <!-- PRODUCTS -->
+
+    <div class="panel">
+
+        <h2>
+            📦 Manage Products
+        </h2>
+
+        <div
+            id="productList"
+            class="product-list"
+        >
+            Loading products...
+        </div>
+
+    </div>
+
+
+
+    <!-- RENTALS -->
+
+    <div class="panel">
+
+        <h2>
+            🛒 All Rentals
+        </h2>
+
+        <div
+            id="rentalList"
+            class="rental-list"
+        >
+            Loading rentals...
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+
+/* =====================================
+   LOAD PRODUCTS
+   ===================================== */
+
+async function loadProducts() {
+
+    try {
+
+        const response =
+            await fetch("/api/products");
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Unable to load products"
+            );
+
+        }
+
+
+        const products =
+            await response.json();
+
+
+        document.getElementById(
+            "totalProducts"
+        ).innerText =
+            products.length;
+
+
+        document.getElementById(
+            "availableProducts"
+        ).innerText =
+            products.filter(
+                product => product.available
+            ).length;
+
+
+        displayProducts(products);
+
+
+    } catch (error) {
+
+        console.error(error);
+
+
+        document.getElementById(
+            "productList"
+        ).innerText =
+            "Unable to load products.";
+
+    }
+
+}
+
+
+
+/* =====================================
+   DISPLAY PRODUCTS
+   ===================================== */
+
+function displayProducts(products) {
+
+    const container =
+        document.getElementById(
+            "productList"
+        );
+
+
+    container.innerHTML = "";
+
+
+    if (products.length === 0) {
+
+        container.innerText =
+            "No products available.";
+
+        return;
+
+    }
+
+
+    products.forEach(function(product) {
+
+        const item =
+            document.createElement("div");
+
+
+        item.className =
+            "item";
+
+
+        item.innerHTML = `
+
+            <h3>
+                ${product.name}
+            </h3>
+
+            <p>
+                Category:
+                ${product.category}
+            </p>
+
+            <p>
+                Price:
+                ₹${product.pricePerDay} / day
+            </p>
+
+            <p>
+                Availability:
+                ${product.available
+                    ? "🟢 Available"
+                    : "🔴 Not Available"}
+            </p>
+
+
+            <div class="item-actions">
+
+                <button
+                    onclick="showEditBox(${product.id})"
+                >
+                    ✏️ Edit
+                </button>
+
+                <button
+                    class="delete-button"
+                    onclick="deleteProduct(${product.id})"
+                >
+                    🗑️ Delete
+                </button>
+
+            </div>
+
+
+            <div
+                class="edit-box"
+                id="edit-${product.id}"
+            >
+
+                <div class="edit-grid">
+
+                    <input
+                        type="text"
+                        id="edit-name-${product.id}"
+                        value="${product.name}"
+                    >
+
+
+                    <select
+                        id="edit-category-${product.id}"
+                    >
+
+                        <option
+                            value="Laptops"
+                            ${product.category === "Laptops"
+                                ? "selected"
+                                : ""}
+                        >
+                            Laptops
+                        </option>
+
+                        <option
+                            value="Phones"
+                            ${product.category === "Phones"
+                                ? "selected"
+                                : ""}
+                        >
+                            Phones
+                        </option>
+
+                        <option
+                            value="Cameras"
+                            ${product.category === "Cameras"
+                                ? "selected"
+                                : ""}
+                        >
+                            Cameras
+                        </option>
+
+                        <option
+                            value="Gaming"
+                            ${product.category === "Gaming"
+                                ? "selected"
+                                : ""}
+                        >
+                            Gaming
+                        </option>
+
+                    </select>
+
+
+                    <input
+                        type="number"
+                        id="edit-price-${product.id}"
+                        value="${product.pricePerDay}"
+                        min="1"
+                    >
+
+                </div>
+
+
+                <div style="margin-top:15px;">
+
+                    <label>
+                        <input
+                            type="checkbox"
+                            id="edit-available-${product.id}"
+                            ${product.available
+                                ? "checked"
+                                : ""}
+                            style="width:auto;"
+                        >
+
+                        Product is available
+
+                    </label>
+
+                </div>
+
+
+                <div class="item-actions">
+
+                    <button
+                        class="save-button"
+                        onclick="updateProduct(${product.id})"
+                    >
+                        💾 Save Changes
+                    </button>
+
+                    <button
+                        onclick="hideEditBox(${product.id})"
+                    >
+                        Cancel
+                    </button>
+
+                </div>
+
+            </div>
+
+        `;
+
+
+        container.appendChild(item);
+
+    });
+
+}
+
+
+
+/* =====================================
+   SHOW EDIT BOX
+   ===================================== */
+
+function showEditBox(productId) {
+
+    document.getElementById(
+        "edit-" + productId
+    ).style.display = "block";
+
+}
+
+
+
+/* =====================================
+   HIDE EDIT BOX
+   ===================================== */
+
+function hideEditBox(productId) {
+
+    document.getElementById(
+        "edit-" + productId
+    ).style.display = "none";
+
+}
+
+
+
+/* =====================================
+   UPDATE PRODUCT
+   ===================================== */
+
+async function updateProduct(productId) {
+
+    const name =
+        document.getElementById(
+            "edit-name-" + productId
+        ).value;
+
+
+    const category =
+        document.getElementById(
+            "edit-category-" + productId
+        ).value;
+
+
+    const pricePerDay =
+        Number(
+            document.getElementById(
+                "edit-price-" + productId
+            ).value
+        );
+
+
+    const available =
+        document.getElementById(
+            "edit-available-" + productId
+        ).checked;
+
+
+    const product = {
+
+        name: name,
+
+        category: category,
+
+        pricePerDay: pricePerDay,
+
+        available: available
+
+    };
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/products/" +
+                productId,
+                {
+                    method: "PUT",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify(product)
+                }
+            );
+
+
+        if (!response.ok) {
+
+            const message =
+                await response.text();
+
+            throw new Error(message);
+
+        }
+
+
+        alert(
+            "Product updated successfully!"
+        );
+
+
+        loadProducts();
+
+
+    } catch (error) {
+
+        console.error(error);
+
+
+        alert(
+            "Unable to update product: " +
+            error.message
+        );
+
+    }
+
+}
+
+
+
+/* =====================================
+   ADD PRODUCT
+   ===================================== */
+
+document
+    .getElementById("productForm")
+    .addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+
+            const product = {
+
+                name:
+                    document.getElementById(
+                        "productName"
+                    ).value,
+
+                category:
+                    document.getElementById(
+                        "productCategory"
+                    ).value,
+
+                pricePerDay:
+                    Number(
+                        document.getElementById(
+                            "productPrice"
+                        ).value
+                    ),
+
+                available: true
+
+            };
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/api/products",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body:
+                                JSON.stringify(product)
+                        }
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Could not add product"
+                    );
+
+                }
+
+
+                document.getElementById(
+                    "message"
+                ).innerText =
+                    "Product added successfully!";
+
+
+                document.getElementById(
+                    "productForm"
+                ).reset();
+
+
+                loadProducts();
+
+
+            } catch (error) {
+
+                console.error(error);
+
+
+                document.getElementById(
+                    "message"
+                ).innerText =
+                    "Failed to add product.";
+
+            }
+
+        }
+    );
+
+
+
+/* =====================================
+   DELETE PRODUCT
+   ===================================== */
+
+async function deleteProduct(productId) {
+
+    const confirmed =
+        confirm(
+            "Are you sure you want to delete this product?"
+        );
+
+
+    if (!confirmed) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/products/" +
+                productId,
+                {
+                    method: "DELETE"
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Could not delete product"
+            );
+
+        }
+
+
+        alert(
+            "Product deleted successfully!"
+        );
+
+
+        loadProducts();
+
+
+    } catch (error) {
+
+        console.error(error);
+
+
+        alert(
+            "Failed to delete product."
+        );
+
+    }
+
+}
+
+
+
+/* =====================================
+   LOAD RENTALS
+   ===================================== */
+
+async function loadRentals() {
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/rentals"
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Unable to load rentals"
+            );
+
+        }
+
+
+        const rentals =
+            await response.json();
+
+
+        document.getElementById(
+            "totalRentals"
+        ).innerText =
+            rentals.length;
+
+
+        document.getElementById(
+            "activeRentals"
+        ).innerText =
+            rentals.filter(
+                rental =>
+                    rental.status === "ACTIVE"
+            ).length;
+
+
+        displayRentals(rentals);
+
+
+    } catch (error) {
+
+        console.error(error);
+
+
+        document.getElementById(
+            "rentalList"
+        ).innerText =
+            "Unable to load rentals.";
+
+    }
+
+}
+
+
+
+/* =====================================
+   DISPLAY RENTALS
+   ===================================== */
+
+function displayRentals(rentals) {
+
+    const container =
+        document.getElementById(
+            "rentalList"
+        );
+
+
+    container.innerHTML = "";
+
+
+    if (rentals.length === 0) {
+
+        container.innerText =
+            "No rentals found.";
+
+        return;
+
+    }
+
+
+    rentals.forEach(function(rental) {
+
+        const item =
+            document.createElement("div");
+
+
+        item.className =
+            "item";
+
+
+        const statusClass =
+            rental.status === "ACTIVE"
+            ? "status-active"
+            : "status-cancelled";
+
+
+        item.innerHTML = `
+
+            <h3>
+                Rental #${rental.id}
+            </h3>
+
+            <p>
+                👤 User ID:
+                ${rental.userId}
+            </p>
+
+            <p>
+                📦 Product ID:
+                ${rental.productId}
+            </p>
+
+            <p>
+                📅 ${rental.startDate}
+                →
+                ${rental.endDate}
+            </p>
+
+            <p>
+                💰 Total:
+                ₹${rental.totalPrice}
+            </p>
+
+            <p class="${statusClass}">
+                ${rental.status}
+            </p>
+
+        `;
+
+
+        container.appendChild(item);
+
+    });
+
+}
+
+
+
+/* =====================================
+   START
+   ===================================== */
+
+loadProducts();
+
+loadRentals();
+
+</script>
+
+
+</body>
+
+</html>
